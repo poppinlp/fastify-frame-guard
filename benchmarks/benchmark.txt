@@ -1,0 +1,4 @@
+Average req/sec in 5 times 10s test
+with no plugin: 28719.38
+with frameguard middleware: 27702.62
+with fastify-frame-guard plugin: 28633.74

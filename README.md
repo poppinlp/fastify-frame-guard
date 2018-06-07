@@ -1,5 +1,7 @@
 # fastify-frame-guard
 
+[![Build Status][ci-img]][ci-url]
+[![Code coverage][cov-img]][cov-url]
 [![Code style][lint-img]][lint-url]
 [![Dependency Status][dep-img]][dep-url]
 [![Dev Dependency Status][dev-dep-img]][dev-dep-url]
@@ -13,49 +15,7 @@ Fastify plugin to set the X-Frame-Options header, mitigating things like clickja
 
 You may know [frameguard](https://github.com/helmetjs/frameguard) as a [frameguard middleware](https://helmetjs.github.io/docs/frameguard/) used in [helmet](https://github.com/helmetjs/helmet). And you could use it as a middleware in fastify also. So why i made this plugin?
 
-Benchmark with no plugin:
-
-```txt
-Running 20s test @ http://127.0.0.1:10290/pudge/rest/v0/benchmark
-1000 connections
-
-Stat         Avg     Stdev   Max
-Latency (ms) 32.37   8.9     1139.09
-Req/Sec      30444   1051.31 31048
-Bytes/Sec    4.53 MB 170 kB  4.63 MB
-
-609k requests in 20s, 90.7 MB read
-```
-
-Benchmark with frameguard as middleware:
-
-```txt
-Running 20s test @ http://127.0.0.1:10290/pudge/rest/v0/benchmark
-1000 connections
-
-Stat         Avg     Stdev   Max
-Latency (ms) 36.25   11.56   1757.27
-Req/Sec      27235.2 1100.59 28126
-Bytes/Sec    4.83 MB 189 kB  5.01 MB
-
-545k requests in 20s, 97 MB read
-```
-
-Benchmark with this plugin:
-
-```txt
-Running 20s test @ http://127.0.0.1:10290/pudge/rest/v0/benchmark
-1000 connections
-
-Stat         Avg     Stdev   Max
-Latency (ms) 29.89   201.7   9976.95
-Req/Sec      29270.4 2192.26 30224
-Bytes/Sec    5.23 MB 415 kB  5.38 MB
-
-585k requests in 20s, 104 MB read
-```
-
-So that's the reason and wish you like it. :)
+You may find the reason in [benchmark result](./benchmarks/benchmark.txt) and wish you like it. :)
 
 ## Install
 
@@ -89,7 +49,7 @@ app.listen(3000, err => {
 
 ## Options
 
-This plugin has all options which the middleware in helmet gives and support a new feature.
+This plugin has all options which the middleware in helmet gives and support a new option `allowedDomains`.
 
 ### action {string}
 
@@ -120,14 +80,17 @@ app.register(fastifyHsts, {
 
 ## Changelog
 
-- 0.1.0: Init version
+- 0.2.0
+  - Add test case
+  - Add code coverage
+  - Add benchmarks
+- 0.1.0:
+  - Init version
 
-## Todo
-
-- Add test case
-- Add ci
-- Add benchmark scripts
-
+[ci-img]: https://img.shields.io/travis/poppinlp/fastify-frame-guard.svg?style=flat-square
+[ci-url]: https://travis-ci.org/poppinlp/fastify-frame-guard
+[cov-img]: https://img.shields.io/coveralls/poppinlp/fastify-frame-guard.svg?style=flat-square
+[cov-url]: https://coveralls.io/github/poppinlp/fastify-frame-guard?branch=master
 [lint-img]: https://img.shields.io/badge/code%20style-handsome-brightgreen.svg?style=flat-square
 [lint-url]: https://github.com/poppinlp/eslint-config-handsome
 [dep-img]: https://img.shields.io/david/poppinlp/fastify-frame-guard.svg?style=flat-square
