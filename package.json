@@ -1,6 +1,6 @@
 {
   "name": "fastify-frame-guard",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Fastify plugin to set the X-Frame-Options header, mitigating things like clickjacking",
   "main": "src/index.js",
   "scripts": {
