@@ -22,6 +22,9 @@
     "helmet",
     "frame-guard"
   ],
+  "files": [
+    "src"
+  ],
   "author": "PoppinL",
   "license": "MIT",
   "bugs": {
