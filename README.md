@@ -17,6 +17,11 @@ You may know [frameguard](https://github.com/helmetjs/frameguard) as a [framegua
 
 You may find the reason in [benchmark result](./benchmarks/benchmark.txt) and wish you like it. :)
 
+## Difference
+
+This plugin has passed all [frameguard](https://github.com/helmetjs/frameguard) test cases.
+And no difference in options.
+
 ## Install
 
 Via npm:
@@ -57,29 +62,18 @@ Specify the action for this plugin which could be `DENY`, `SAMEORIGIN` or `ALLOW
 
 - `DENY`: couldn't be framed
 - `SAMEORIGIN`: could only be framed from the same origin
-- `ALLOW-FROM`: could be framed from domain which you specified
+- `ALLOW-FROM`: could be framed from `domain` option
+- others: use default value
 
 ### domain {string}
 
 Specify the allowed domain for `ALLOW-FROM` action.
 
-### allowedDomains {array}
-
-You could use this option when you have multi allowed domains. If you set this option, this plugin will load the domain param in request url params. Then if the domain param is in your `allowedDomains` list, plugin will set header to allowed that domain. If not, plugin will set header with your `domain` option.
-
-```js
-app.register(fastifyHsts, {
-  action: 'allow-from',
-  domain: 'http://www.foo.com',
-  allowedDomains: [
-    'http://www.bar.com',
-    'http://www.some-third-party-service.com'
-  ]
-});
-```
-
 ## Changelog
 
+- 0.3.0
+  - Drop `allowedDomains` option
+  - Update test case
 - 0.2.0
   - Add test case
   - Add code coverage

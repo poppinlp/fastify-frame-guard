@@ -1,4 +1,8 @@
-Average req/sec in 5 times 10s test
-with no plugin: 28719.38
-with frameguard middleware: 27702.62
-with fastify-frame-guard plugin: 28633.74
+node version: v10.6.0
+platform: darwin
+cpus: [{"model":"Intel(R) Core(TM) i7-5557U CPU @ 3.10GHz","speed":3100,"times":{"user":73240260,"nice":0,"sys":39734290,"idle":289398340,"irq":0}},{"model":"Intel(R) Core(TM) i7-5557U CPU @ 3.10GHz","speed":3100,"times":{"user":40145090,"nice":0,"sys":16992790,"idle":345213710,"irq":0}},{"model":"Intel(R) Core(TM) i7-5557U CPU @ 3.10GHz","speed":3100,"times":{"user":70666030,"nice":0,"sys":33464810,"idle":298220800,"irq":0}},{"model":"Intel(R) Core(TM) i7-5557U CPU @ 3.10GHz","speed":3100,"times":{"user":40890400,"nice":0,"sys":16494860,"idle":344966290,"irq":0}}]
+
+Average req/sec in 3 times 10s test
+with no plugin: 24371.22
+with frameguard middleware: 21276.87
+with fastify-frame-guard plugin: 23412.33

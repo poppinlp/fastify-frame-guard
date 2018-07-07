@@ -12,84 +12,64 @@ test.beforeEach(t => {
 	t.context.app = app;
 });
 
-const testHandler = (t, opts, expectedHeader, params = '') => {
-	const { app } = t.context;
+const mock = async (t, opts, expected) => {
+	const rsp = await t.context.app.register(plugin, opts).inject({
+		method: 'get',
+		url: '/'
+	});
+	const header = rsp.headers['x-frame-options'];
 
-	t.plan(3);
-	app.register(plugin, opts);
-	app.inject(
-		{
-			method: 'GET',
-			url: `/${params}`
-		},
-		(err, res) => {
-			const expected = {
-				payload: 'hello world',
-				header: expectedHeader
-			};
-			const target = {
-				payload: res.payload,
-				header: res.headers['x-frame-options']
-			};
-
-			t.is(err, null, 'should throw no error');
-			t.is(target.payload, expected.payload, 'should have expected response payload');
-			t.is(target.header, expected.header, 'should have expected response header');
-			t.end();
-		}
-	);
+	t.is(header, expected);
 };
 
-test.cb('default option', t => {
-	testHandler(t, {}, 'SAMEORIGIN');
+test('default value should be "SAMEORIGIN"', async t => {
+	await mock(t, {}, 'SAMEORIGIN');
 });
 
-test.cb('set action to DENY', t => {
-	testHandler(
-		t,
-		{
-			action: 'deny'
-		},
-		'DENY'
-	);
+[
+	123,
+	false,
+	null,
+	{},
+	['ALLOW-FROM', 'http://foobar.com'],
+	new String('deny') // eslint-disable-line no-new-wrappers
+].forEach(action => {
+	test(`should set header to default value for non-string action: ${JSON.stringify(
+		action
+	)}`, async t => {
+		await mock(t, { action }, 'SAMEORIGIN');
+	});
 });
 
-test.cb('set action to allow-from with domain', t => {
-	testHandler(
-		t,
-		{
-			action: 'allow-from',
-			domain: 'http://www.foobar.com'
-		},
-		'ALLOW-FROM http://www.foobar.com'
-	);
+['', ' ', 'denny', ' deny '].forEach(action => {
+	test('should throw error for invalid action', async t => {
+		await t.throws(mock(t, { action }));
+	});
 });
 
-test.cb('set allowedDomains with unmatch query', t => {
-	testHandler(
-		t,
-		{
-			action: 'allow-from',
-			domain: 'http://www.foobar.com',
-			allowedDomains: [
-				'http://www.notmatch.com'
-			]
-		},
-		'ALLOW-FROM http://www.foobar.com'
-	);
+[
+	'',
+	undefined,
+	null,
+	false,
+	123,
+	['http://foobar.com'],
+	new String('http://foobar.com') // eslint-disable-line no-new-wrappers
+].forEach(domain => {
+	test('should throw error for "ALLOW-FROM" with invalid domain', async t => {
+		await t.throws(mock(t, { action: 'ALLOW-FROM', domain }));
+	});
 });
 
-test.cb('set allowedDomains with match query', t => {
-	testHandler(
-		t,
-		{
-			action: 'allow-from',
-			domain: 'http://www.foobar.com',
-			allowedDomains: [
-				'http://www.match.com'
-			]
-		},
-		'ALLOW-FROM http://www.match.com',
-		'?domain=http://www.match.com'
-	);
+[
+	['deny', 'DENY'],
+	['DENY', 'DENY'],
+	['sameorigin', 'SAMEORIGIN'],
+	['SAMEORIGIN', 'SAMEORIGIN'],
+	['allow-from', 'ALLOW-FROM http://foobar.com'],
+	['ALLOW-FROM', 'ALLOW-FROM http://foobar.com']
+].forEach(([action, expected]) => {
+	test(`action should be case insensitivity: ${action}`, async t => {
+		await mock(t, { action, domain: 'http://foobar.com' }, expected);
+	});
 });
